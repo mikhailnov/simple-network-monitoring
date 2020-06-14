@@ -1,0 +1,10 @@
+[Unit]
+Description=Simple Network Monitoring
+
+[Service]
+Type=simple
+Environment=NETWORK_MONITORING_NO_VERBOSE=1
+ExecStart=/usr/local/bin/network-monitoring
+
+[Install]
+WantedBy=multi-user.target
