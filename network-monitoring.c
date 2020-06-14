@@ -73,11 +73,8 @@ end:
 	return rc;
 }
 
-int main(){
+int _ping(){
 	int rc = -1;
-	int rc_log = -1;
-	int failed = 0;
-	fprintf(stderr, "%s\n", "Welcome to network monitoring");
 	char cmd[100];
 	for (int i = 0; hosts[i] != NULL; i++) {
 		sprintf(cmd, "ping -c2 %s 2>/dev/null 1>&2", hosts[i]);
@@ -85,11 +82,24 @@ int main(){
 		rc = system(cmd);
 		if (rc != 0) {
 			fprintf(stderr, "Error pinging %s\n", hosts[i]);
-			++failed;
 			// TODO: add fallback to syslog()
 			// TODO: it is not optimal to open/close file in _log() on every iteration
 			_log(hosts[1]);
 		}
 	}
-	return failed;
+	return rc;
+}
+
+int main(){
+	int rc = -1;
+	fprintf(stderr, "%s\n", "Welcome to network monitoring");
+	if (getenv("NETWORK_MONITORING_NO_LOOP")) {
+		rc = _ping();
+	} else {
+		for (;;) {
+			// ctrl+c must stop it
+			rc = _ping();
+		}
+	}
+	return rc;
 }
