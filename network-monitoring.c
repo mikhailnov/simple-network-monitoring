@@ -78,7 +78,8 @@ int _ping(){
 	char cmd[100];
 	for (int i = 0; hosts[i] != NULL; i++) {
 		sprintf(cmd, "ping -c2 %s 2>/dev/null 1>&2", hosts[i]);
-		fprintf(stderr, "running %s ...\n", cmd);
+		if (!(getenv("NETWORK_MONITORING_NO_VERBOSE")))
+			fprintf(stderr, "running %s ...\n", cmd);
 		rc = system(cmd);
 		if (rc != 0) {
 			fprintf(stderr, "Error pinging %s\n", hosts[i]);
