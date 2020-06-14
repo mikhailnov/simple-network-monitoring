@@ -1,6 +1,6 @@
 # Simple network monitoring
 
-This program is intended to be run via cron, e.g. every minute, and logs when one of defined IPs or hosts is not reachable.
+This program is intended to be run via cron, e.g. every minute, or as a "daemon" (via e.g. systemd) and logs when one of defined IPs or hosts is not reachable.
 
 Example installation:
 
