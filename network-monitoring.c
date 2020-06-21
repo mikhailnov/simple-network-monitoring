@@ -16,6 +16,16 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <time.h>
+
+#ifdef __linux__
+// for GNU ping
+// Requires root!
+#define PING_TIME "0,02"
+#else
+// for BSD ping
+#define PING_TIME "0.02"
+#endif
+
 // "81.177.174.52",
 char* hosts[]= {"81.176.226.156", "81.177.142.42", "81.177.142.83", "81.177.48.8", NULL};
 
@@ -77,7 +87,7 @@ int _ping(){
 	int rc = -1;
 	char cmd[100];
 	for (int i = 0; hosts[i] != NULL; i++) {
-		sprintf(cmd, "ping -c2 %s 2>/dev/null 1>&2", hosts[i]);
+		sprintf(cmd, "ping -c 3 -s 200 -i %s %s 2>/dev/null 1>&2", PING_TIME, hosts[i]);
 		if (!(getenv("NETWORK_MONITORING_NO_VERBOSE")))
 			fprintf(stderr, "running %s ...\n", cmd);
 		rc = system(cmd);
